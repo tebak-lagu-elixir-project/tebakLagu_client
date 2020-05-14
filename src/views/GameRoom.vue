@@ -1,13 +1,14 @@
 <template>
-  <div id="GameRoom">
-    <h2>Game Room #TKTK</h2>
+  <div id="GameRoom" class="container">
+    <h2>Game Room {{joinedRoomData.name}}</h2>
     <hr/>
     <div v-if="!gameFinished">
       <h2>Round {{questionNumber}}</h2>
-      <audio controls>
+      <button type="button" class="btn btn-success" @click="playGame()" v-if="!isPlaying">Play!</button>
+      <!-- <audio controls>
         <source src="http://cdn-preview-5.deezer.com/stream/c-5bdbc1c9e6ddad715a461836727da5c4-4.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
-      </audio>
+      </audio> -->
       <div class="container col-4 d-flex justify-content-center p-2">
           <div class="row">
               <form @submit.prevent="submitAnswer()">
@@ -17,17 +18,33 @@
               </form>
           </div>
       </div>
-    </div>
-    <div v-else-if="gameFinished">
+      </div>
+      <div v-else-if="gameFinished">
         <h3>And the winner is...</h3>
         <h2>TKTKTKTK!</h2>
         <!-- Play again | Exit room -->
+      </div>
     </div>
 
-  </div>
+    <!-- <div class="container" id="gameRoom">
+      <h1>Room Indonesia music</h1>
+            <h1>What is the song title?</h1>
+            <img src="../assets/musicLogo.png" style="width: 20%;" >
+        <form @submit.prevent="Guess()" id="formGame">
+          <h1>Guees the song </h1>
+            <input type="text" placeholder="what you think .." id="answer" v-model="answer"><br>
+            <button type="submit" @click.prevent="Guess()">Submit</button>
+        </form>
+    </div> -->
+
 </template>
 
 <script>
+// import axios from 'axios'
+// import io from 'socket.io-client'
+// const socket = io.connect('https://shrouded-forest-27107.herokuapp.com')
+// const socket = io.connect('http://localhost:3000')
+
 export default {
   name: 'GameRoom',
   data () {
@@ -39,10 +56,19 @@ export default {
       currentPlaylist: [], // berisi array lagu-lagu yang jadi soal
       currentPlayerPoint: 0,
       currentSongId: 0,
-      gameFinished: false
+      gameFinished: false,
+      isPlaying: false
     }
   },
   methods: {
+    playGame () {
+      const currentSong = new Audio((this.currentPlaylist.pop().preview))
+      currentSong.play()
+      this.isPlaying = true
+      setTimeout(() => {
+        this.isPlaying = false
+      }, 30000)
+    },
     submitAnswer () {
       console.log(this.answer)
       // check answer
@@ -71,7 +97,24 @@ export default {
     //   // music.play()
     // }
   },
+  computed: {
+    joinedRoomData () {
+      return this.$store.state.joinedRoomData
+    },
+    currentUserName () {
+      return this.$store.state.currentUserName
+    },
+    allRooms () {
+      return this.$store.state.allRooms
+    }
+  },
   created () {
+    console.log(this.allRooms)
+    // socket.emit('addPlayer', {
+    //   roomId: this.joinedRoomData.id,
+    //   newPlayer: 'testUser'
+    // })
+    this.playGame()
     // io.on('createdRoom', (room) => {
     //   console.log(room)
 

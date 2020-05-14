@@ -5,8 +5,24 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    roomNumber: 1,
+    joinedRoomData: '',
+    currentUserName: '',
+    allRooms: []
   },
   mutations: {
+    addRoomNumber (state, payload) {
+      state.roomNumber += payload
+    },
+    set_joinedRoomData (state, payload) {
+      state.joinedRoomData = payload
+    },
+    set_currentUserName (state, payload) {
+      state.currentUserName = payload
+    },
+    set_allRooms (state, payload) {
+      state.allRooms = payload
+    }
   },
   actions: {
   },
