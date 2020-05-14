@@ -11,7 +11,6 @@
           <form @submit.prevent="login()">
             <h1>Username :</h1>
               <input type="text" placeholder="Username .." id="username" v-model="newUser.userName">
-              <button type="submit" @click.prevent="login()">Submit</button>
           </form>
         </div>
         <div class="overlay-container">

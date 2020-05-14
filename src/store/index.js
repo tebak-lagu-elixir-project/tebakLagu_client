@@ -16,6 +16,7 @@ export default new Vuex.Store({
     },
     set_joinedRoomData (state, payload) {
       state.joinedRoomData = payload
+      state.allRooms.push(payload)
     },
     set_currentUserName (state, payload) {
       state.currentUserName = payload

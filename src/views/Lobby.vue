@@ -45,7 +45,7 @@
                     <form v-on:submit.prevent="createRoom">
                       <h2>Choose your genre !</h2>
                       <label for="roomName">Your room name:</label>
-                      <input id="roomName" type="text" v-model="roomName">
+                      <input id="roomName" type="text" placeholder="nick name .." v-model="roomName"><br>
                       <select name="genre" id="genre" v-model="selectedGenre">
                         <option value="" disabled>Genre</option>
                         <option value="7644890062">Edm</option>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary close" data-dismiss="modal" aria-label="Close" v-on:click.prevent="createRoom()">create</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click.prevent="createRoom()">create</button>
                 </div>
                 </div>
             </div>
@@ -68,12 +68,11 @@
       <!-- List Available Room -->
       <div class="overlay-container">
         <div class="overlay">
-          <div class="overlay-panel overlay-right">
+          <div class="overlay-panel overlay-right ">
           <h1>Currently available room</h1>
-            <h1>Game Room : </h1><br>
             <ul>
               <div v-for="room in allRooms" :key="room.id">
-                <li><router-link :to="`/gameroom/${room.id}`" @click="joinRoom(room.id)">Game room | {{room.name}} #36</router-link></li>
+                <li><router-link :to="`/gameroom/${room.id}`" @click="joinRoom(room.id)">Game room {{room.name}}</router-link></li>
               </div>
             </ul>
             <img src="../assets/LunasMusic.gif" style="width: 50%;" >
@@ -113,7 +112,7 @@ export default {
       console.log('creating room')
       axios({
         method: 'GET',
-        url: 'https://shrouded-forest-27107.herokuapp.com/songs/chart/'
+        url: `https://shrouded-forest-27107.herokuapp.com/songs/${this.selectedGenre}`
       })
         .then(result => {
           socket.emit('createRoom', {
