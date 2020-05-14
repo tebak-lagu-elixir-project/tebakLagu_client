@@ -10,7 +10,8 @@
         <div class="form-container username-container">
           <form @submit.prevent="login()">
             <h1>Username :</h1>
-              <input type="text" placeholder="Username .." id="userName" v-model="newUser.userName">
+              <input type="text" placeholder="Username .." id="username" v-model="newUser.userName">
+              <button type="submit" @click.prevent="login()">Submit</button>
           </form>
         </div>
         <div class="overlay-container">
@@ -38,8 +39,8 @@ export default {
   methods: {
     login () {
       console.log('login process activated')
-      console.log(this.newUser.userName)
-      this.newUser.userName = ''
+      this.$store.commit('set_currentUserName', this.newUser.userName)
+      this.$router.push('/lobby')
     }
   }
 }
