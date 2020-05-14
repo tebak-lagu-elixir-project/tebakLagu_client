@@ -49,6 +49,14 @@ button {
 	text-transform: uppercase;
 }
 
+a:active{
+    transform: scale(0.95);
+}
+
+a:focus{
+    outline: none;
+}
+
 button:active {
 	transform: scale(0.95);
 }
@@ -89,7 +97,7 @@ input {
 
 #gameRoom {
     background-color: teal;
-    border-radius: 50%;
+    border-radius: 40%;
 }
 
 #formGame {

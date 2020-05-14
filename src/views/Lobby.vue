@@ -31,7 +31,7 @@
         <form>
           <h1>Create a Room :</h1>
           <!-- modal button Create Room -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCreate" data-whatever="newtask">create</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCreate" data-whatever="newtask" data-dismiss="modal" aria-label="close">create</button>
         <div class="modal fade" id="ModalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -56,7 +56,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="createRoom">create</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"  v-on:click.prevent="createRoom">create</button>
                 </div>
                 </div>
             </div>

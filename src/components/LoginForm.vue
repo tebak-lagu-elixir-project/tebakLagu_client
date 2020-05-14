@@ -10,15 +10,14 @@
         <div class="form-container username-container">
           <form @submit.prevent="login()">
             <h1>Username :</h1>
-              <input type="email" placeholder="Username .." id="username" v-model="newUser.userName">
-              <button type="submit" @click.prevent="login()">Submit</button>
+              <input type="text" placeholder="Username .." id="userName" v-model="newUser.userName">
           </form>
         </div>
         <div class="overlay-container">
           <div class="overlay">
             <div class="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <a class="btn"> <img src="../assets/musicLogo.png" style="width: 50%;"> </a>
+              <h1>Hello, Friend! lets Start!</h1>
+              <a class="btn" @click.prevent="login()"> <img src="../assets/musicLogo.png" style="width: 50%;"> </a>
             </div>
           </div>
         </div>
@@ -39,6 +38,8 @@ export default {
   methods: {
     login () {
       console.log('login process activated')
+      console.log(this.newUser.userName)
+      this.newUser.userName = ''
     }
   }
 }

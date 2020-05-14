@@ -17,7 +17,7 @@
     <div class="container" id="gameRoom">
       <h1>Room Indonesia music</h1>
             <h1>What is the song title?</h1>
-            <img src="../assets/musicLogo.png" style="width: 20%;" >
+              <a class="btn"> <img src="../assets/musicLogo.png" style="width: 20%;"> </a>
         <form @submit.prevent="Guess()" id="formGame">
           <h1>Guees the song </h1>
             <input type="text" placeholder="what you think .." id="answer" v-model="answer"><br>
