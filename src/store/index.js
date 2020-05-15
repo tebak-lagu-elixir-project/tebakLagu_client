@@ -8,7 +8,8 @@ export default new Vuex.Store({
     roomNumber: 1,
     joinedRoomData: '',
     currentUserName: '',
-    allRooms: []
+    allRooms: [],
+    socket: ''
   },
   mutations: {
     addRoomNumber (state, payload) {
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     },
     set_allRooms (state, payload) {
       state.allRooms = payload
+    },
+    set_socket (state, payload) {
+      state.socket = payload
     }
   },
   actions: {

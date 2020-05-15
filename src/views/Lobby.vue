@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     joinRoom (roomId) {
-      socket.emit('addPlayer', {
+      this.socket.emit('addPlayer', {
         roomId: roomId,
         newPlayer: this.currentUserName
       })
@@ -115,7 +115,7 @@ export default {
         url: `https://shrouded-forest-27107.herokuapp.com/songs/${this.selectedGenre}`
       })
         .then(result => {
-          socket.emit('createRoom', {
+          this.socket.emit('createRoom', {
             name: this.roomName,
             songs: result.data.songs,
             players: this.currentUserName
@@ -132,10 +132,14 @@ export default {
     },
     currentUserName () {
       return this.$store.state.currentUserName
+    },
+    socket () {
+      return this.$store.state.socket
     }
   },
   created () {
     // socket.emit('showRooms')
+    this.$store.commit('set_socket', socket)
     socket.on('createdRoom', (room) => {
       console.log('Ini adalah created room', room)
       this.$store.commit('set_joinedRoomData', room)

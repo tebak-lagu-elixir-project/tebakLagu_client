@@ -8,12 +8,13 @@
           </div>
             <h1>What is the song title?</h1>
               <a class="btn" @click="trigerPlay()" v-if="!isPlaying"> <img src="../assets/musicLogo.png" style="width: 20%;"> </a>
-            <form @submit.prevent="submitAnswer()" id="formGame">
+            <form @submit.prevent="submitAnswer()" id="formGame" v-if="isPlaying">
               <h1>Guees the song </h1>
                 <input type="text" placeholder="what you think .." id="answer" v-model="answer"><br>
-                <button type="submit" @click.prevent="Guess()">Submit</button>
+                <button type="submit" @click.prevent="submitAnswer()">Submit</button>
             </form>
-
+        {{tempScore}}
+        {{currentUserName}}
       <!-- <h2>Round {{questionNumber}}</h2>
       <button type="button" class="btn btn-success" @click="playGame()" v-if="!isPlaying">Play!</button> -->
       <!-- <audio controls>
@@ -30,17 +31,19 @@
           </div>
       </div> -->
     </div>
-      <div v-else-if="gameFinished">
+      <div v-if="gameFinished">
         <h3>And the winner is...</h3>
-        <h2>TKTKTKTK!</h2>
+        <h2>{{playerWinner[0].username}}!</h2>
         <!-- Play again | Exit room -->
+        <router-link to="/lobby"> back to lobby</router-link>
       </div>
   </div>
 
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
+const baseUrl = 'http://localhost:3000'
 // import io from 'socket.io-client'
 // const socket = io.connect('https://shrouded-forest-27107.herokuapp.com')
 // const socket = io.connect('http://localhost:3000')
@@ -57,33 +60,77 @@ export default {
       currentPlayerPoint: 0,
       currentSongId: 0,
       gameFinished: false,
-      isPlaying: false
+      isPlaying: false,
+      currentSong: [],
+      tempScore: 0,
+      timer: 0,
+      play: null,
+      playerWinner: ''
     }
   },
   methods: {
+    getWinner () {
+      const payload = {
+        username: this.currentUserName,
+        score: this.tempScore
+      }
+      this.socket.emit('getScore', payload)
+    },
     trigerPlay () {
-      // socket.emit('trigerPlay')
+      this.socket.emit('trigerPlay')
       this.playGame()
     },
     playGame () {
-      const currentSong = new Audio((this.currentPlaylist.pop().preview))
+      const oneCurrentSong = this.currentPlaylist.pop()
+      this.currentSong = oneCurrentSong
       this.questionNumber = this.currentPlaylist.length + 1
       console.log(this.questionNumber)
-      currentSong.play()
+      this.play = new Audio(this.currentSong.preview)
+      this.play.play()
       this.isPlaying = true
-      setTimeout(() => {
-        this.isPlaying = false
+      this.timer = setTimeout(() => {
+        if (this.isPlaying === true) {
+          this.isPlaying = false
+        }
       }, 30000)
+      if (this.currentPlaylist.length === 1) {
+        setTimeout(() => {
+          this.getWinner()
+          this.socket.emit('displayWinner')
+        }, 30000)
+      }
     },
     submitAnswer () {
+      // clearTimeout(this.timer)
       console.log(this.answer)
       // check answer
-      if (this.answer === this.currentPlaylist[this.currentSongIdforQuestion].title) {
-        this.currentPlayerPoint += 10
-        this.answer = ''
-      } else {
-        this.answer = ''
-      }
+      axios({
+        method: 'post',
+        url: `${baseUrl}/songs/answer/${this.currentSong.id}`,
+        data: {
+          inputAnswer: this.answer,
+          username: 'HARDCODE'
+        }
+      })
+        .then(result => {
+          console.log(result)
+          if (result.data.score > 0) {
+            this.socket.emit('alreadyAnswer')
+            this.play.pause()
+            this.isPlaying = false
+            clearTimeout(this.timer)
+          }
+          this.tempScore += result.data.score
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      // if (this.answer === this.currentPlaylist[this.currentSongIdforQuestion].title) {
+      //   this.currentPlayerPoint += 10
+      //   this.answer = ''
+      // } else {
+      //   this.answer = ''
+      // }
       // Setelah cek apakah benar salah, maka ganti ke pertanyaan berikutnya
       // Yang perlu di-update: stage number number in Question title, lagu yang akan dimainkan
       if (this.currentSongIdforQuestion === 10) {
@@ -112,6 +159,9 @@ export default {
     },
     allRooms () {
       return this.$store.state.allRooms
+    },
+    socket () {
+      return this.$store.state.socket
     }
   },
   created () {
@@ -120,9 +170,22 @@ export default {
       return el.id === +this.$route.params.id
     })
     this.currentPlaylist = currentRoomGame[0].songs
-    // socket.on('playGames', () => {
-    //   console.log('masuuuuk')
-    //   this.playGame()
+    this.socket.on('playGames', () => {
+      console.log('masuuuuk')
+      this.playGame()
+    })
+    this.socket.on('stopSong', () => {
+      this.play.pause()
+      this.isPlaying = false
+    })
+
+    this.socket.on('getWinner', (payload) => {
+      this.playerWinner = payload
+      this.gameFinished = true
+    })
+
+    // this.socket.on('getAllScore', () => {
+
     // })
     // console.log(currentRoomGame, 'test')
     // console.log(this.allRooms)

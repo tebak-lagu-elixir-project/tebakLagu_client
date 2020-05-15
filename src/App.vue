@@ -1,10 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">LandingPage</router-link> |
-      <router-link to="/lobby">Lobby</router-link> |
-      <router-link to="/gameroom/1">Gameroom</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
