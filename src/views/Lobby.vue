@@ -86,8 +86,7 @@
 <script>
 import axios from 'axios'
 import io from 'socket.io-client'
-// const socket = io.connect('https://shrouded-forest-27107.herokuapp.com')
-const socket = io.connect('http://localhost:3000')
+const socket = io.connect('https://shrouded-forest-27107.herokuapp.com')
 
 export default {
   name: 'Lobby',
