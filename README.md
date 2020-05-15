@@ -1,4 +1,12 @@
-# tebaklagu_client
+# Tebak Lagu
+
+## Guess the Song and Win the Heart!
+
+To play our game.
+
+Go to https://tebaklagu-elexir.web.app/
+
+Stacks: Vue, Socket.io, & [Deezer API](https://api.deezer.com/search?q=red-velvet)
 
 ## Project setup
 ```
